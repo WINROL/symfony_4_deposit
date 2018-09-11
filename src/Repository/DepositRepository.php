@@ -19,32 +19,32 @@ class DepositRepository extends ServiceEntityRepository
         parent::__construct($registry, Deposit::class);
     }
 
-//    /**
-//     * @return Deposit[] Returns an array of Deposit objects
-//     */
-    /*
-    public function findByExampleField($value)
+    public function getAverageSum(int $age1, ?int $age2 = null) :float
     {
-        return $this->createQueryBuilder('d')
-            ->andWhere('d.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('d.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+        $conn = $this->getEntityManager()->getConnection();
 
-    /*
-    public function findOneBySomeField($value): ?Deposit
-    {
-        return $this->createQueryBuilder('d')
-            ->andWhere('d.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        $dateStart = (new \DateTime())->modify("- {$age1} year")->format('Y-m-d');
+        $dateEnd = '';
+        if (null !== $age2) {
+            $dateEnd = (new \DateTime())->modify("- {$age2} year")->format('Y-m-d');
+        }
+
+        $stmt = $conn->prepare(
+            "SELECT
+            ROUND(SUM(a.sum) / COUNT(d.id), 2) as avg
+            FROM account a
+            INNER JOIN client c ON c.id = a.client_id
+            INNER JOIN deposit d ON d.account_id = a.id
+            WHERE c.birth_date <= :dateStart AND ('' = :dateEnd OR c.birth_date > :dateEnd)"
+        );
+
+        $stmt->execute([
+            'dateStart' => $dateStart,
+            'dateEnd' => $dateEnd,
+        ]);
+
+        $result = number_format($stmt->fetchColumn(), 2, '.', '');
+
+        return $result;
     }
-    */
 }

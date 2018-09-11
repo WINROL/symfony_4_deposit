@@ -1,0 +1,10 @@
+{% if results is empty %}
+    Нет данных для отображения
+{% else %}
+    <h1>Статистика:</h1>
+    <ul>
+        {% for key,value in results %}
+            <li>{{ key }} : {{ value }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}

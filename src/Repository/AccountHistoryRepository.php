@@ -26,11 +26,11 @@ class AccountHistoryRepository extends ServiceEntityRepository
         $stmt = $conn->prepare(
             "SELECT 
               (SUM(sum)) * -1 as sum, 
-              DATE_FORMAT(create_dt, '%Y-%m') as ym 
+              create_y_m as ym 
             FROM 
                account_history 
-            GROUP BY ym
-            ORDER BY ym ASC;
+            GROUP BY create_y_m
+            ORDER BY create_y_m ASC;
 
             ;"
         );

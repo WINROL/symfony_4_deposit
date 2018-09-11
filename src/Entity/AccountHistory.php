@@ -6,6 +6,9 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\AccountHistoryRepository")
+ * @ORM\Table(name="account_history",
+ * indexes={@ORM\Index(name="IDX_ac_h_create_y_m", columns={"create_y_m"})}
+ * )
  */
 class AccountHistory
 {
@@ -31,6 +34,11 @@ class AccountHistory
      * @ORM\Column(type="datetime")
      */
     private $create_dt;
+
+    /**
+     * @ORM\Column(type="string", length=7)
+     */
+    private $create_y_m;
 
     public function getId(): ?int
     {
@@ -69,6 +77,18 @@ class AccountHistory
     public function setCreateDt(\DateTimeInterface $create_dt): self
     {
         $this->create_dt = $create_dt;
+
+        return $this;
+    }
+
+    public function getCreateYM(): ?string
+    {
+        return $this->create_y_m;
+    }
+
+    public function setCreateYM(string $create_y_m): self
+    {
+        $this->create_y_m = $create_y_m;
 
         return $this;
     }
