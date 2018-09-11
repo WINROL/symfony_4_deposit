@@ -19,32 +19,32 @@ class AccountHistoryRepository extends ServiceEntityRepository
         parent::__construct($registry, AccountHistory::class);
     }
 
-//    /**
-//     * @return AccountHistory[] Returns an array of AccountHistory objects
-//     */
-    /*
-    public function findByExampleField($value)
+    public function getSumForAllMonths(): ?array
     {
-        return $this->createQueryBuilder('a')
-            ->andWhere('a.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('a.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+        $conn = $this->getEntityManager()->getConnection();
 
-    /*
-    public function findOneBySomeField($value): ?AccountHistory
-    {
-        return $this->createQueryBuilder('a')
-            ->andWhere('a.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        $stmt = $conn->prepare(
+            "SELECT 
+              (SUM(sum)) * -1 as sum, 
+              DATE_FORMAT(create_dt, '%Y-%m') as ym 
+            FROM 
+               account_history 
+            GROUP BY ym
+            ORDER BY ym ASC;
+
+            ;"
+        );
+
+        $stmt->execute();
+        if ($stmt->rowCount() < 1) {
+            return null;
+        }
+
+        $result = [];
+        while ($row = $stmt->fetch()) {
+            $result[$row['ym']] = $row['sum'];
+        }
+
+        return $result;
     }
-    */
 }
