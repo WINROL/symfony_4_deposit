@@ -23,7 +23,7 @@ class Deposit
     private $account;
 
     /**
-     * @ORM\Column(type="decimal", precision=2, scale=1)
+     * @ORM\Column(type="decimal", precision=3, scale=1)
      */
     private $percent;
 
@@ -33,7 +33,7 @@ class Deposit
     private $start_dt;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime", nullable=true)
      */
     private $close_dt;
 
