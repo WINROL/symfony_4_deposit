@@ -6,6 +6,9 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ClientRepository")
+ * @ORM\Table(name="client", uniqueConstraints={
+ *      @ORM\UniqueConstraint(name="IDX_c_inn", columns={"inn"})
+ * })
  */
 class Client
 {
