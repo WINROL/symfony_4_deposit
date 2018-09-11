@@ -32,7 +32,7 @@ class Client
     private $last_name;
 
     /**
-     * @ORM\Column(columnDefinition="TINYINT(1) NOT NULL")
+     * @ORM\Column(type="smallint", length=1, options={"unsigned"=true})
      */
     private $gender;
 
